@@ -1,6 +1,6 @@
 {
   "name": "@yahapi/mysql",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Wrapper for Node.js mysql driver",
   "main": "dist/index.js",
   "author": "Niels Krijger <niels@kryger.nl>",
