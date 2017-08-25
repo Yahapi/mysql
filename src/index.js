@@ -98,14 +98,19 @@ export function transaction(queries) {
         }
 
         // Execute queries in sequence, MySQL protocol does not support parallel queries
+        const queryResults = [];
         const querySequence = queries.reduce((promise, statement) => {
-          return promise.then(() => executeQuery(statement.query, statement.params));
+          return promise.then(() => {
+            return executeQuery(statement.query, statement.params).then((result) => {
+              queryResults.push(result);
+            });
+          });
         }, Promise.resolve());
         return querySequence.then(() => {
           conn.commit(err3 => {
             if (err3) throw err3;
             conn.release();
-            return resolveTransaction();
+            return resolveTransaction(queryResults);
           });
         }).catch(err4 => {
           conn.rollback(() => {
